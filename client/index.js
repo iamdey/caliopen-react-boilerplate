@@ -4,7 +4,7 @@ import { AppContainer } from 'react-hot-loader';
 import App from './App';
 import configureStore from './store/configure-store';
 
-const store = configureStore();
+const store = configureStore({}, window.devToolsExtension && window.devToolsExtension());
 
 const rootEl = document.getElementById('root');
 ReactDOM.render(

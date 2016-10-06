@@ -1,10 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { Provider } from 'react-redux';
-import { Router, Route, browserHistory } from 'react-router';
+import { Router, browserHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
-import Auth from './auth';
-import Discussions from './discussions';
-
+import routes from './routes';
 
 class App extends Component {
   constructor(props) {
@@ -14,11 +12,7 @@ class App extends Component {
   render() {
     return (
       <Provider store={this.props.store}>
-        <Router history={this.history}>
-          <Route path="/" component={Discussions}>
-          </Route>
-          <Route path="/auth" component={Auth} />
-        </Router>
+        <Router history={this.history} routes={routes} />
       </Provider>
     );
   }

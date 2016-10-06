@@ -1,17 +1,26 @@
 const path = require('path');
-const webpack = require('webpack');
-const WebpackDevServer = require('webpack-dev-server');
-const config = require('../webpack/webpack.config');
+const express = require('express');
+const app = express();
+const isDev = process.env.NODE_ENV === 'development';
 
-new WebpackDevServer(webpack(config), {
-  contentBase: path.join(__dirname, '..', 'public'),
-  publicPath: config.output.publicPath,
-  hot: true,
-  historyApiFallback: true
-}).listen(3000, 'localhost', function (err, result) {
-  if (err) {
-    return console.log(err);
-  }
+app.set('port', (process.env.PORT || 3000));
 
-  console.log('Listening at http://localhost:3000/');
+//-------
+// generate js on the fly w/ HMR
+// instead client must be released
+if (isDev) {
+  app.use(require('./middleware/webpack.js'));
+  app.use(require('./middleware/webpack-hot.js'));
+}
+
+//-------
+// assets & eventual bundle.js
+app.use(express.static(path.join(__dirname, '..', 'public')));
+
+//-------
+app.get('*', require('./middleware/ssr.js'));
+
+//-------
+app.listen(app.get('port'), function() {
+  console.log(`Server started: http://localhost: ${app.get('port')}/`);
 });

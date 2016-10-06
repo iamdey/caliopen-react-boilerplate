@@ -6,8 +6,8 @@ import rootReducer from './reducer';
 const router = routerMiddleware(browserHistory);
 const createStoreWithMiddleware = applyMiddleware(router)(createStore);
 
-function configureStore(initialState) {
-  return createStoreWithMiddleware(rootReducer, initialState, window.devToolsExtension && window.devToolsExtension());
+function configureStore(initialState, extension) {
+  return createStoreWithMiddleware(rootReducer, initialState, extension);
 }
 
 export default configureStore;
