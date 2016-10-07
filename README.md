@@ -25,7 +25,9 @@ middleware), that's all.
 * support assets
 * prefetch redux
 * add bundle.js filename for production env.
+* serverside HMR (test prefetchs, new routes etc.)
 
+## Architecture
 
 ```
    +-------------+
