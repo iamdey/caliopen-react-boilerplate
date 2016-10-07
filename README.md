@@ -25,3 +25,42 @@ middleware), that's all.
 * support assets
 * prefetch redux
 * add bundle.js filename for production env.
+
+
+```
+   +-------------+
+   |             |
++-->  Expressjs  |
+|  |             |
+|  +---+---------+
+|      |            +--------------------------+
+|  +---v----+ yes   |                          |
+|  | isDev? +------->  webpack dev middleware  |
+|  +--------+       |     build & serve JS     |
+|      |no          |                          |
+|      |            +----+---------------------+
+|      |                 |
+|      |            +----v---------------------+
+|      |            |                          |
+|      |            |  webpack hot middleware  |
+|      |            |  use webpack compiler    |
+|      |            |  serve hot modules JS    |
+|      |            |                          |
+|      |            +----+---------------------+
+|      |                 |
+|      |      +----------+
+|      |      |
+|      |      |
+|  +---v------v-----------+
+|  |                      |
+|  |    SSR middleware    |
+|  |  build & serve HTML  |
+|  |                      |
+|  +---+------------------+
+|      |
+|   +--v-------+
+|   |          |
++---+  Device  |
+    |          |
+    +----------+
+```
