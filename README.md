@@ -9,11 +9,12 @@ but not designed for configuration.
 So here it is, I take ideas from [all of those boilerplates](http://andrewhfarmer.com/starter-project/)
 and started to use [Expressjs](http://expressjs.com/), webpack and some middlewares
 ([webpack-dev-middleware](https://github.com/webpack/webpack-dev-middleware),
-[webpack-hot-middleware](https://github.com/glenjamin/webpack-hot-middleware)), that's all.
+[webpack-hot-middleware](https://github.com/glenjamin/webpack-hot-middleware), a home made ssr
+middleware), that's all.
 
 ## Features
 
-* SSR (universaljs, isomorphic)
+* SSR (universal js, isomorphic)
 * redux
 * react-router
 * webpack ( + webpack-dashboard)
@@ -23,3 +24,4 @@ and started to use [Expressjs](http://expressjs.com/), webpack and some middlewa
 
 * support assets
 * prefetch redux
+* add bundle.js filename for production env.
