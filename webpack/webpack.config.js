@@ -6,8 +6,6 @@ const rootFolder = path.resolve(__dirname, '..');
 const isDev = process.env.NODE_ENV === 'development';
 
 module.exports = {
-  devtool: 'eval',
-  context: rootFolder,
   entry: isDev ? [
     'react-hot-loader/patch',
     'webpack-hot-middleware/client',

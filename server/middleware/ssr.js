@@ -2,28 +2,24 @@ const fs = require('fs');
 const path = require('path');
 const React = require('react');
 const ReactDOMServer = require('react-dom/server');
+const isDev = process.env.NODE_ENV === 'development';
 
-require('babel-register')({
-  presets: [ 'react' ]
-});
+require('babel-register')();
 
 const config = {
-  styles: () => '',
-  scripts: () => '<script src="/bundle.js"></script>',
+  styles: [],
+  scripts: ['/bundle.js'],
 }
 
 /**
  * base html template
  */
-function getMarkup(provider, store, assetsByChunkName) {
-  const markup = ReactDOMServer.renderToString(provider);
+function getMarkup(reactElement, store, assets) {
+  const markup = ReactDOMServer.renderToString(reactElement);
   const initialState = store.getState();
-  const scripts = (
-    Array.isArray(assetsByChunkName.main) ? assetsByChunkName.main : [assetsByChunkName.main]
-  )
-    .filter(path => path.endsWith('.js'))
-    .reduce((str, path) => `${str}<script src="${path}"></script>`, '');
-
+  const scripts = assets.scripts.reduce((str, path) => `
+${str}
+<script src="${path}"></script>`, '');
   const tpl = fs.readFileSync(path.join(__dirname, '../..', 'template', 'index.html'), 'utf8');
 
   return [
@@ -34,7 +30,13 @@ function getMarkup(provider, store, assetsByChunkName) {
 }
 
 module.exports = (req, res) => {
-  const assetsByChunkName = res.locals.webpackStats.toJson().assetsByChunkName;
+  if (isDev) {
+    const assetsByChunkName = res.locals.webpackStats.toJson().assetsByChunkName;
+    config.scripts = (
+      Array.isArray(assetsByChunkName.main) ? assetsByChunkName.main : [assetsByChunkName.main]
+    )
+      .filter(path => path.endsWith('.js'))
+  }
   const ReactRouter = require('react-router');
   const match = ReactRouter.match;
   const RouterContext = React.createFactory(ReactRouter.RouterContext);
@@ -54,7 +56,7 @@ module.exports = (req, res) => {
     } else if (redirectLocation) {
       res.redirect(302, redirectLocation.pathname + redirectLocation.search)
     } else if (renderProps) {
-      res.send(getMarkup(Provider({ store: store }, RouterContext(renderProps)), store, assetsByChunkName));
+      res.send(getMarkup(Provider({ store: store }, RouterContext(renderProps)), store, config));
     } else {
       res.status(404).send('Not found')
     }
